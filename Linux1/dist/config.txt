@@ -1,0 +1,7 @@
+DB_HOST=3.108.192.137
+DB_USER=yogesh
+DB_PASSWORD=Minutus@2023
+DB_NAME=zabbix
+GROUP_ID=89
+IMAGE_PATH_PREFIX=/mnt/c/Users/Admin/Downloads/
+IMAGE_NAME=3DXLens-crop.jpg
