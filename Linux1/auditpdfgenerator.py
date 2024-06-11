@@ -65,6 +65,10 @@ def fetch_data_from_db():
     LIMIT 1
     """
 
+    sql_query3 =f"""
+           select name from hstgrp h where groupid = {groupid}
+              """
+
     try:
         connection = mysql.connector.connect(
             host=config['db_host'],
@@ -85,7 +89,14 @@ def fetch_data_from_db():
             result2 = cursor.fetchone()
             json_data2 = json.loads(result2[0]) if result2 else {}
 
-            return json_data, json_data2
+            cursor.execute(sql_query3)  
+            result3 = cursor.fetchone() 
+            if result3:
+                host_name = result3[0]                  
+            else:
+                print("No data found for query 3")
+
+            return json_data, json_data2, host_name
 
     except mysql.connector.Error as error:
         print("Error while connecting to MySQL database:", error)
@@ -397,5 +408,6 @@ image_path_prefix = read_config_value('config.txt', 'IMAGE_PATH_PREFIX')
 image_name=read_config_value('config.txt', 'IMAGE_NAME')
 image_pathss = f"{image_path_prefix}{image_name}"
 image_paths=[image_pathss]
-json_data, json_data2 = fetch_data_from_db()
-generate_pdf(json_data, json_data2, "combined_audit_report.pdf", image_paths,last_page_title="Host Map")
+json_data, json_data2,host_name = fetch_data_from_db()
+# pdf_filename = f"{host_name}_audit_report.pdf"
+generate_pdf(json_data, json_data2, f"{host_name}_audit_report.pdf", image_paths,last_page_title="Host Map")
